@@ -12,14 +12,7 @@ __pycache__/
 venv/
 .env
 .env.*
-
-# ===============================
-# YOLO Training Outputs (optional)
-# ===============================
-runs/detect/*
-runs/train/*
-runs/val/*
-runs/predict/*
+venv
 
 # ===============================
 # Logs
@@ -39,3 +32,28 @@ Thumbs.db
 # Jupyter
 # ===============================
 .ipynb_checkpoints/
+
+# ===============================
+# Additional Python/Build/Env ignores
+# ===============================
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+.mypy_cache/
+.pyre/
+*.egg-info/
+build/
+dist/
+*.egg
+
+# Project-specific large artifacts
+outputs/
+uploads/
+static/output/
+static/upload/
+
+# Local settings and caches
+local_settings.py
+instance/
+.webassets-cache
