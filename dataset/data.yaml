@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 9
+names: ['Skin-Cancer  Actinic Keratosis', 'Skin-Cancer  Basal cell carcinoma', 'Skin-Cancer  Dermatofibroma', 'Skin-Cancer  Melanoma', 'Skin-Cancer  Pigmented benign keratosis', 'Skin-Cancer  Seborrheic keratosis', 'Skin-Cancer  Squamous cell carcinoma', 'Skin-Cancer  Vascular lesion', 'Skin-Cancer Nevus']
+
+roboflow:
+  workspace: ai-eds7n
+  project: skin-cancer-recogniser
+  version: 4
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ai-eds7n/skin-cancer-recogniser/dataset/4
