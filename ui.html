@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skin Cancer Detection | AI Dashboard</title>
+
+<style>
+:root {
+  --bg-main: #0d1117;
+  --bg-panel: #161b22;
+  --bg-card: #0b0f14;
+  --border: #30363d;
+  --text-main: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent-blue: #58a6ff;
+  --accent-green: #2ea043;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: Consolas, monospace;
+}
+
+/* ===== PAGE LAYOUT ===== */
+
+.page {
+  height: 100vh;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 14px;
+}
+
+/* ===== HEADER ===== */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent-blue);
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ===== CONTROLS ===== */
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+input[type=file] {
+  background: var(--bg-main);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+button {
+  background: linear-gradient(180deg, #238636, #2ea043);
+  color: #ffffff;
+  border: none;
+  padding: 7px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+/* ===== MAIN CONTAINER ===== */
+
+.single-box {
+  height: calc(100vh - 120px);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1.25fr 1.25fr 1fr;
+  gap: 14px;
+}
+
+/* ===== SECTIONS ===== */
+
+.section {
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.section h3 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* ===== IMAGES ===== */
+
+.section img {
+  flex: 1;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #020409;
+}
+
+/* ===== OUTPUT CARDS ===== */
+
+.output-card,
+.types-card {
+  background: linear-gradient(180deg, var(--bg-card), #06090f);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ===== RESULT TEXT ===== */
+
+#result {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ===== CONFIDENCE BAR ===== */
+
+.conf-bar {
+  width: 100%;
+  height: 8px;
+  background: #21262d;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.conf-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    var(--accent-green),
+    var(--accent-blue)
+  );
+  transition: width 0.6s ease;
+}
+
+/* ===== TYPES LIST ===== */
+
+.types-card ul {
+  margin: 4px 0 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+
+.types-card li {
+  margin-bottom: 6px;
+  color: var(--text-muted);
+}
+
+.types-card li.active {
+  color: var(--accent-green);
+  font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Skin Cancer Detection System</h1>
+    <div class="subtitle">YOLOv8 · FastAPI · Medical AI Dashboard</div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <input type="file" id="file">
+    <button onclick="detect()">Run Inference</button>
+  </div>
+
+  <!-- MAIN BOX -->
+  <div class="single-box">
+
+    <!-- ORIGINAL -->
+    <div class="section">
+      <h3>Original Image</h3>
+      <img id="orig">
+    </div>
+
+    <!-- PREDICTED -->
+    <div class="section">
+      <h3>Predicted Image</h3>
+      <img id="pred">
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="section">
+
+      <div class="output-card">
+        <h3>Prediction Output</h3>
+        <div id="result">Awaiting input…</div>
+        <div class="conf-bar">
+          <div class="conf-fill" id="confFill"></div>
+        </div>
+      </div>
+
+      <div class="types-card">
+        <h3>Supported Skin Cancer Types</h3>
+        <ul id="typesList">
+          <li>Melanoma</li>
+          <li>Melanocytic Nevus</li>
+          <li>Basal Cell Carcinoma</li>
+          <li>Actinic Keratosis</li>
+          <li>Benign Keratosis</li>
+          <li>Dermatofibroma</li>
+          <li>Vascular Lesion</li>
+          <li>Squamous Cell Carcinoma</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+async function detect() {
+  const fileInput = document.getElementById("file");
+  const resultBox = document.getElementById("result");
+  const confFill = document.getElementById("confFill");
+  const types = document.querySelectorAll("#typesList li");
+
+  if (!fileInput.files.length) {
+    alert("Select an image");
+    return;
+  }
+
+  resultBox.innerHTML = "Running inference…";
+  confFill.style.width = "0%";
+  types.forEach(li => li.classList.remove("active"));
+
+  const formData = new FormData();
+  formData.append("file", fileInput.files[0]);
+
+  const res = await fetch("/predict", { method: "POST", body: formData });
+  const data = await res.json();
+
+  document.getElementById("orig").src = data.original;
+  document.getElementById("pred").src = data.result;
+
+  if (!data.detections || !data.detections.length) {
+    resultBox.innerHTML = "No prediction returned.";
+    return;
+  }
+
+  const det = data.detections[0];
+  resultBox.innerHTML = `<b>${det.label}</b><br>Confidence: ${det.confidence}%`;
+  confFill.style.width = det.confidence + "%";
+
+  types.forEach(li => {
+    if (li.textContent.toLowerCase().includes(det.label.toLowerCase())) {
+      li.classList.add("active");
+    }
+  });
+}
+</script>
+</body>
+</html>
