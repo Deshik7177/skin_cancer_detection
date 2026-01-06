@@ -1,5 +1,19 @@
+# ---------- Backend ----------
+fastapi
+uvicorn[standard]
+python-multipart
+
+# ---------- YOLO / ML ----------
 ultralytics
-streamlit
-opencv-python
-numpy
+torch
+torchvision
+
+# ---------- Image Processing ----------
+opencv-python-headless
 Pillow
+
+# ---------- Core Utils ----------
+numpy
+pyyaml
+requests
+psutil
