@@ -6,6 +6,11 @@ A simple skin cancer detection app using a trained model and FastAPI backend.
 ## ▶️ Run locally
 
 ### Run on Windows
+#Git clone
+```bash
+git clone https://github.com/Deshik7177/skin_cancer_detection.git
+```
+
 1. **Create virtual environment**
 
 ```powershell
